@@ -18,7 +18,7 @@ jobs:
       - name: Create temporary release signing key
         env:
           STORE_PASS: "temporary-build-password-2026"
-          KEY_PASS: "temporary-key-password-2026"
+          KEY_PASS: "temporary-build-password-2026"
         run: |
           keytool -genkeypair -v             -keystore "$RUNNER_TEMP/studious-release.jks"             -storepass "$STORE_PASS"             -keypass "$KEY_PASS"             -alias studious-release             -keyalg RSA             -keysize 2048             -validity 10000             -dname "CN=Studious App, OU=Build, O=Studious, L=Israel, C=IL"
           cat > "$RUNNER_TEMP/signing.properties" <<EOF
