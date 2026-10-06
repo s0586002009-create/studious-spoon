@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
       {"טהרות","כלים|30","אהלות|18","נגעים|14","פרה|12","טהרות|10","מקואות|10","נדה|10","מכשירין|6","זבים|5","טבול יום|4","ידים|4","עוקצים|3"}
     };
 
-    @Override public void onCreate(Bundle b){super.onCreate(b); p=getSharedPreferences(PREF,0); dedication=p.getString(DED,"הלימוד לעילוי נשמת ר' מאיר משה בן ר' בן ציון הלוי ומינקה בת ר' משה שמואל ע"ה"); buildShell(); if(!p.getBoolean("setup",false)) showSetup(); else showHome();}
+    @Override public void onCreate(Bundle b){super.onCreate(b); p=getSharedPreferences(PREF,0); dedication=p.getString(DED,"הלימוד לעילוי נשמת ר' מאיר משה בן ר' בן ציון הלוי ומינקה בת ר' משה שמואל ע״ה"); buildShell(); if(!p.getBoolean("setup",false)) showSetup(); else showHome();}
     int dp(int x){return (int)(x*getResources().getDisplayMetrics().density+.5f);}
     TextView tv(String s,float size){TextView v=new TextView(this);v.setText(s);v.setTextSize(size);v.setTextColor(Color.rgb(35,32,40));v.setGravity(Gravity.RIGHT);v.setFontFeatureSettings("kern");return v;}
     Button btn(String s){Button b=new Button(this);b.setText(s);b.setAllCaps(false);return b;}
