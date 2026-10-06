@@ -15,8 +15,28 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10'
-      - run: gradle assembleDebug --no-daemon
+      - name: Create temporary release signing key
+        env:
+          STORE_PASS: "temporary-build-password-2026"
+          KEY_PASS: "temporary-key-password-2026"
+        run: |
+          keytool -genkeypair -v             -keystore "$RUNNER_TEMP/studious-release.jks"             -storepass "$STORE_PASS"             -keypass "$KEY_PASS"             -alias studious-release             -keyalg RSA             -keysize 2048             -validity 10000             -dname "CN=Studious App, OU=Build, O=Studious, L=Israel, C=IL"
+          cat > "$RUNNER_TEMP/signing.properties" <<EOF
+          storeFile=$RUNNER_TEMP/studious-release.jks
+          storePassword=$STORE_PASS
+          keyAlias=studious-release
+          keyPassword=$KEY_PASS
+          EOF
+      - name: Clean build
+        run: gradle clean --no-daemon
+      - name: Build signed release APK
+        run: gradle assembleRelease --no-daemon -PsigningPropertiesPath="$RUNNER_TEMP/signing.properties"
+      - name: Verify APK
+        run: |
+          test -s app/build/outputs/apk/release/app-release.apk
+          unzip -t app/build/outputs/apk/release/app-release.apk >/dev/null
+          echo "APK verified: $(stat -c%s app/build/outputs/apk/release/app-release.apk) bytes"
       - uses: actions/upload-artifact@v4
         with:
-          name: studious-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: studious-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
